@@ -1,1 +1,1 @@
-web: server\target\universal\stage\bin\scala-adapters-example-server.bat
+web: server\target\universal\stage\bin\scala-adapters-images-server.bat

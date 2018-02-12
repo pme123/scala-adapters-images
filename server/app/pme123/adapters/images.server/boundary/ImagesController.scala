@@ -23,7 +23,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * Original see here: https://github.com/playframework/play-scala-websocket-images
   */
 @Singleton
-class ExampleController @Inject()(@Named("imagesHandlerActor") imagesClientActor: ActorRef
+class ImagesController @Inject()(@Named("imagesHandlerActor") imagesClientActor: ActorRef
                                   , @Named("imagesParentActor") imagesParentActor: ActorRef
                                   , template: views.html.index
                                   , assetsFinder: AssetsFinder

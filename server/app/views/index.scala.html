@@ -3,7 +3,7 @@
 
 @views.html.adapters.main(assets = assets
     , webJarsUtil = webJarsUtil
-)(title = "Example Adapter"
+)(title = "Images Adapter"
     , styles = Html("<link rel=\"stylesheet\" type=\"text/css\" href=\"" +assets.withUrlPrefix(context).path("assets/stylesheets/images.css") + "\">")
     , icon = assets.withUrlPrefix(context).path("assets/images/favicon.png")
 ) {

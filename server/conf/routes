@@ -3,8 +3,8 @@
 # ~~~~
 
 # Any Play HTML file needs its own .
-GET        /                             pme123.adapters.images.server.boundary.ExampleController.index
-GET        /ws/images/:nrImages          pme123.adapters.images.server.boundary.ExampleController.images(nrImages: Int)
+GET        /                             pme123.adapters.images.server.boundary.ImagesController.index
+GET        /ws/images/:nrImages          pme123.adapters.images.server.boundary.ImagesController.images(nrImages: Int)
 
 GET        /assets/*file                 controllers.Assets.at(file)
 GET        /versionedAssets/*file        controllers.Assets.versioned(file)

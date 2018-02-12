@@ -1,7 +1,11 @@
-# scala-adapters-example
-[![Build Status](https://travis-ci.org/pme123/scala-adapters-example.svg?branch=master)](https://travis-ci.org/pme123/scala-adapters-example)
-[![](https://jitpack.io/v/pme123/scala-adapters-example.svg)](https://jitpack.io/#pme123/scala-adapters-example)
-[![Heroku](http://heroku-badge.herokuapp.com/?app=thawing-citadel-33535)](https://thawing-citadel-33535.herokuapp.com)
+# scala-adapters-images
+[![Build Status](https://travis-ci.org/pme123/scala-adapters-images.svg?branch=master)](https://travis-ci.org/pme123/scala-adapters-images)
+[![](https://jitpack.io/v/pme123/scala-adapters-images.svg)](https://jitpack.io/#pme123/scala-adapters-images)
+[![Heroku](http://heroku-badge.herokuapp.com/?app=TODO)](https://TODO.herokuapp.com)
+
+A project that uses my own small libraries:
+* [scala-adapters](https://github.com/pme123/scala-adapters)
+* [play-akka-telegrambot4s](https://github.com/pme123/play-akka-telegrambot4s)
 
 WORK IN PROGRESS
 

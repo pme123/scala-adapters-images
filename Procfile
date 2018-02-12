@@ -1,1 +1,1 @@
-web: server/target/universal/stage/bin/scala-adapters-example-server -Dhttp.port=${PORT}
+web: server/target/universal/stage/bin/scala-adapters-images-server -Dhttp.port=${PORT}
