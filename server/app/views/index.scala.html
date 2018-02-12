@@ -1,0 +1,18 @@
+@this(webJarsUtil: org.webjars.play.WebJarsUtil)
+@(context: String, assets: AssetsFinder)(implicit r: Request[_], rh: RequestHeader)
+
+@views.html.adapters.main(assets = assets
+    , webJarsUtil = webJarsUtil
+)(title = "Example Adapter"
+    , styles = Html("<link rel=\"stylesheet\" type=\"text/css\" href=\"" +assets.withUrlPrefix(context).path("assets/stylesheets/images.css") + "\">")
+    , icon = assets.withUrlPrefix(context).path("assets/images/favicon.png")
+) {
+
+
+    @scalajs.html.scripts("scala-adapters-images-client",
+        routes.Assets.at(_).toString,
+        name => getClass.getResource(s"/public/$name") != null)
+
+    <script>client.ProjectClient.imagesPage("@context");</script>
+
+}
