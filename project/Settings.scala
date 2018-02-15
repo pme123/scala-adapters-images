@@ -16,14 +16,14 @@ object Settings {
   lazy val orgId = "pme123"
   lazy val orgHomepage = Some(new URL("https://github.com/pme123"))
   lazy val projectName = "scala-adapters-images"
-  lazy val projectV = "0.0.1"
+  lazy val projectV = "0.1.0"
 
   // main versions
   lazy val scalaV = "2.12.4"
 
   lazy val scalaTestV = "3.0.4"
   lazy val playTelegramV = "0.1.0"
-  lazy val adaptersV = "0.0.4"
+  lazy val adaptersV = "0.1.1"
 
   lazy val buildVersion: String = sys.env.getOrElse("BUILD_VERSION", default = projectV)
   lazy val buildNumber: String = sys.env.getOrElse("BUILD_NUMBER", default = s"${(System.currentTimeMillis / 1000).asInstanceOf[Int]}")

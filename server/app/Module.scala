@@ -2,16 +2,15 @@ import com.google.inject.AbstractModule
 import play.api.libs.concurrent.AkkaGuiceSupport
 import pme.bot.boundary.BotRunner
 import pme.bot.control.CommandDispatcher
-import pme123.adapters.images.server.control.{ImagesHandlerActor, ImagesRegisterActor, ImagesRegisterParentActor, ImagesConversationSubscription}
+import pme123.adapters.images.server.control._
+import pme123.adapters.server.control.JobActorFactory
 import slogging.{LoggerConfig, SLF4JLoggerFactory}
 
 class Module extends AbstractModule with AkkaGuiceSupport {
 
   override def configure(): Unit = {
-    // images
-    bindActor[ImagesHandlerActor]("imagesHandlerActor")
-    bindActor[ImagesRegisterParentActor]("imagesParentActor")
-    bindActorFactory[ImagesRegisterActor, ImagesRegisterActor.Factory]
+
+    bind(classOf[JobActorFactory]).to(classOf[ImagesJobFactory])
 
     // framework
     LoggerConfig.factory = SLF4JLoggerFactory()
@@ -22,7 +21,8 @@ class Module extends AbstractModule with AkkaGuiceSupport {
     bind(classOf[BotRunner]).asEagerSingleton()
 
     // your Services:
-    bind(classOf[ImagesConversationSubscription]).asEagerSingleton()
+    bind(classOf[EmojiConversationSubscription]).asEagerSingleton()
+    bind(classOf[PhotoConversationSubscription]).asEagerSingleton()
 
   }
 }
