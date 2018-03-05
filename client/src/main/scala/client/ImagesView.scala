@@ -2,14 +2,13 @@ package client
 
 import com.thoughtworks.binding.Binding.Constants
 import com.thoughtworks.binding.{Binding, dom}
-import org.scalajs.dom.document
 import org.scalajs.dom.raw.HTMLElement
 import pme123.adapters.client.{AdaptersClient, ClientWebsocket}
 import slogging.{ConsoleLoggerFactory, LoggerConfig}
 
 import scala.language.implicitConversions
 
-case class ImagesClient(context: String)
+case class ImagesView(context: String, websocketPath: String)
   extends AdaptersClient
     with ImagesUIStore {
 
@@ -25,7 +24,7 @@ case class ImagesClient(context: String)
 
   @dom
   def render: Binding[HTMLElement] = {
-    socket.connectWS(Some(shared.imagesJobIdent))
+    socket.connectWS(Some(websocketPath))
     <div>
     {imageContainer.bind}
   </div>
@@ -37,7 +36,7 @@ case class ImagesClient(context: String)
   private def imageContainer = {
     val demoResults = uiState.lastResults.bind
     <div>
-      {Constants(updateImageElems(demoResults): _*)
+      {Constants(updateConcreteResults(demoResults): _*)
       .map(_.imageElement.bind)}
     </div>
   }

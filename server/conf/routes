@@ -3,15 +3,17 @@
 # ~~~~
 
 # Any Play HTML file needs its own .
-GET        /                             pme123.adapters.images.server.boundary.ImagesController.index
-GET        /images                       pme123.adapters.images.server.boundary.ImagesController.images
+GET        /                  pme123.adapters.images.server.boundary.ImagesController.index
+GET        /jobProcess        pme123.adapters.images.server.boundary.ImagesController.jobProcess
+GET        /jobResults        pme123.adapters.images.server.boundary.ImagesController.jobResults
+GET        /images            pme123.adapters.images.server.boundary.ImagesController.images
 #GET        /ws/images/:nrImages          pme123.adapters.images.server.boundary.ImagesController.images(nrImages: Int)
 
 #GET        /assets/*file                 controllers.Assets.at(file)
 #GET        /versionedAssets/*file        controllers.Assets.versioned(file)
 
 # Access resources from the Webjars
-->         /webjars                      webjars.Routes
+->         /webjars           webjars.Routes
 # Reuse the routes from the ADAPTERS project
 # as we don't need the standard functionality
 ->         /                             adapters.Routes

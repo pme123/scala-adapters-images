@@ -7,7 +7,6 @@ import play.api.libs.json.{JsValue, Json}
 import pme.bot.control.ChatConversation
 import pme.bot.entity.SubscrType.SubscrConversation
 import pme.bot.entity.{Command, FSMState, Subscription}
-import pme123.adapters.server.control.JobActorFactory
 import pme123.adapters.shared.{GenericResult, GenericResults}
 import shared.PhotoData
 
@@ -68,7 +67,8 @@ object PhotoConversation {
   val command = "/addphotos"
 
   // constructor of the Service - which is an Actor
-  def props(handlerActor: ActorRef)(implicit ec: ExecutionContext): Props = Props(PhotoConversation(handlerActor))
+  def props(handlerActor: ActorRef)(implicit ec: ExecutionContext): Props =
+    Props(PhotoConversation(handlerActor))
 
   // TestData
   lazy val photoDataList: List[JsValue] =
@@ -84,13 +84,13 @@ object PhotoConversation {
 // a singleton will inject all needed dependencies and subscribe the service
 @Singleton
 class PhotoConversationSubscription @Inject()(@Named("commandDispatcher") val commandDispatcher: ActorRef
-                                              , val jobFactory: JobActorFactory
+                                              , val jobCreation: ImagesJobCreation
                                               , val system: ActorSystem)
                                              (implicit ec: ExecutionContext) {
 
   import PhotoConversation._
 
   commandDispatcher ! Subscription(command, SubscrConversation
-    , Some(_ => system.actorOf(props(jobFactory.jobActorFor(shared.imagesJobIdent)))))
+    , Some(_ => system.actorOf(props(jobCreation.imagesJobRef))))
 
 }

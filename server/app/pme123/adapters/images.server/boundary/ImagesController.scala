@@ -2,12 +2,11 @@ package pme123.adapters.images.server.boundary
 
 import javax.inject._
 
-import akka.actor.ActorRef
 import controllers.AssetsFinder
 import play.api.Configuration
 import play.api.mvc._
-import pme123.adapters.server.boundary.{JOB_CLIENT, RESULT_CLIENT, WebsocketController}
-import pme123.adapters.server.control.JobActorFactory
+import pme123.adapters.server.boundary.{AdaptersController, JobCockpitController}
+import pme123.adapters.shared.{CUSTOM_PAGE, JOB_PROCESS, JOB_RESULTS}
 
 import scala.concurrent.ExecutionContext
 /**
@@ -15,26 +14,38 @@ import scala.concurrent.ExecutionContext
   * Original see here: https://github.com/playframework/play-scala-websocket-images
   */
 @Singleton
-class ImagesController @Inject()(val jobFactory: JobActorFactory
-                                 , @Named("userParentActor")
-                                 val userParentActor: ActorRef
-                                 , template: views.html.index
+class ImagesController @Inject()(template: views.html.index
+                                 , jobController: JobCockpitController
                                  , assetsFinder: AssetsFinder
                                  , cc: ControllerComponents
                                  , val config: Configuration)
                                 (implicit val ec: ExecutionContext)
   extends AbstractController(cc)
-    with WebsocketController {
+    with AdaptersController {
 
-  // Home page that renders template
-  def index = Action { implicit request: Request[AnyContent] =>
+  val websocketPath = s"/${shared.imagesJobIdent}"
+
+  def index: Action[AnyContent] = jobProcess
+
+  def jobProcess: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     // uses the AssetsFinder API
-    Ok(template(context, JOB_CLIENT ,assetsFinder))
+    Ok(template(context, JOB_PROCESS
+      , websocketPath
+      , assetsFinder))
   }
 
-  def images = Action { implicit request: Request[AnyContent] =>
+  def jobResults: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     // uses the AssetsFinder API
-    Ok(template(context, RESULT_CLIENT, assetsFinder))
+    Ok(template(context, JOB_RESULTS
+      , websocketPath
+      , assetsFinder))
+  }
+
+  def images: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    // uses the AssetsFinder API
+    Ok(template(context, CUSTOM_PAGE
+      , websocketPath
+      , assetsFinder))
   }
 
 }

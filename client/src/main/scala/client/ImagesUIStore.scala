@@ -20,7 +20,7 @@ trait ImagesUIStore extends Logger {
         .map(ImageElem.apply)
   }
 
-  def updateImageElems(lastResults: Seq[JsValue]): Seq[ImageElem] = {
+  def updateConcreteResults(lastResults: Seq[JsValue]): Seq[ImageElem] = {
     toConcreteResults(imagesUIState.imageElems, lastResults)
   }
 }

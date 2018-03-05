@@ -1,8 +1,9 @@
-@import pme123.adapters.server.boundary.{ClientType, JOB_CLIENT}
+@import pme123.adapters.shared.{ClientType}
 
 @this(webJarsUtil: org.webjars.play.WebJarsUtil)
 @(context: String
         , clientType: ClientType
+        , websocketPath: String
         , assets: AssetsFinder)(implicit r: Request[_], rh: RequestHeader)
 
 @views.html.adapters.main(assets = assets
@@ -16,10 +17,6 @@
         routes.Assets.at(_).toString,
         name => getClass.getResource(s"/public/$name") != null)
 
-    @if(clientType == JOB_CLIENT) {
-        <script>client.JobCockpitClient.main("@context");</script>
-    } else {
-        <script>client.ProjectClient.main("@context");</script>
-    }
 
+     <script>client.ProjectClient.main("@context", "@websocketPath", "@clientType");</script>
 }

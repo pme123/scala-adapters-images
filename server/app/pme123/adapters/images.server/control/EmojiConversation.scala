@@ -7,12 +7,10 @@ import play.api.libs.json.{JsValue, Json}
 import pme.bot.control.ChatConversation
 import pme.bot.entity.SubscrType.SubscrConversation
 import pme.bot.entity.{Command, FSMState, Subscription}
-import pme123.adapters.server.control.JobActorFactory
 import pme123.adapters.shared.{GenericResult, GenericResults}
-import shared.{EmojiData, PhotoData}
+import shared.EmojiData
 
 import scala.concurrent.ExecutionContext
-import scala.util.{Failure, Random, Success}
 // @formatter:off
 /**
   * Add Photos or Emojis depending on the mode.
@@ -33,6 +31,7 @@ case class EmojiConversation(handlerActor: ActorRef)
 
   when(Idle) {
     case Event(Command(msg, _), _) =>
+      println(s"received Command! $msg")
       bot.sendMessage(msg, "Send an Emoji!")
       handlerActor ! GenericResults(emojiDataList)
       goto(AddEmojis)
@@ -77,7 +76,7 @@ object EmojiConversation {
 // a singleton will inject all needed dependencies and subscribe the service
 @Singleton
 class EmojiConversationSubscription @Inject()(@Named("commandDispatcher") val commandDispatcher: ActorRef
-                                              , val jobFactory: JobActorFactory
+                                              , val jobCreation: ImagesJobCreation
                                               , val system: ActorSystem)
                                              (implicit ec: ExecutionContext) {
 
@@ -85,6 +84,6 @@ class EmojiConversationSubscription @Inject()(@Named("commandDispatcher") val co
 
   // subscribe the EmojiConversation to the CommandDispatcher
   commandDispatcher ! Subscription(command, SubscrConversation
-    , Some(_ => system.actorOf(props(jobFactory.jobActorFor(shared.imagesJobIdent)))))
+    , Some(_ => system.actorOf(props(jobCreation.imagesJobRef))))
 
 }
