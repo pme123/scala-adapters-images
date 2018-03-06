@@ -3,11 +3,9 @@ package pme123.adapters.images.server.control
 import javax.inject.{Inject, Named, Singleton}
 
 import akka.actor.{ActorRef, ActorSystem, Props}
-import play.api.libs.json.{JsValue, Json}
 import pme.bot.control.ChatConversation
 import pme.bot.entity.SubscrType.SubscrConversation
 import pme.bot.entity.{Command, FSMState, Subscription}
-import pme123.adapters.shared.{GenericResult, GenericResults}
 import shared.PhotoData
 
 import scala.concurrent.ExecutionContext
@@ -24,16 +22,14 @@ import scala.util.{Failure, Success}
   *       ---------
   */
 // @formatter:on
-case class PhotoConversation(handlerActor: ActorRef
+case class PhotoConversation(imagesRepo: ActorRef
                             )
                             (implicit ec: ExecutionContext)
   extends ChatConversation { // this is a Service
-  import PhotoConversation._
 
   when(Idle) {
     case Event(Command(msg, _), _) =>
       bot.sendMessage(msg, "Upload a Photo!")
-      handlerActor ! GenericResults(photoDataList)
       goto(AddPhotos)
     case other =>
       notExpectedData(other)
@@ -44,7 +40,7 @@ case class PhotoConversation(handlerActor: ActorRef
       bot.getFilePath(msg)
         .onComplete {
           case Success((_, fileUrl)) =>
-            handlerActor ! GenericResult(Json.toJson(PhotoData(fileUrl, msg.from.map(_.firstName).getOrElse("Unknown"))))
+            imagesRepo ! PhotoData(fileUrl, msg.from.map(_.firstName).getOrElse("Unknown"))
             bot.sendMessage(msg, s"Thanks, just add another image if you like")
             self ! ExecutionResult(AddPhotos, NoData)
           case Failure(exc: Throwable) =>
@@ -67,30 +63,21 @@ object PhotoConversation {
   val command = "/addphotos"
 
   // constructor of the Service - which is an Actor
-  def props(handlerActor: ActorRef)(implicit ec: ExecutionContext): Props =
-    Props(PhotoConversation(handlerActor))
-
-  // TestData
-  lazy val photoDataList: List[JsValue] =
-    (for {
-      i <- 2 to 3
-      k <- 1 to 5
-    } yield PhotoData(s"https://www.gstatic.com/webp/gallery$i/$k.png"))
-      .map(d => Json.toJson(d))
-      .toList
+  def props(imagesRepo: ActorRef)(implicit ec: ExecutionContext): Props =
+    Props(PhotoConversation(imagesRepo))
 
 }
 
 // a singleton will inject all needed dependencies and subscribe the service
 @Singleton
-class PhotoConversationSubscription @Inject()(@Named("commandDispatcher") val commandDispatcher: ActorRef
-                                              , val jobCreation: ImagesJobCreation
-                                              , val system: ActorSystem)
+class PhotoConversationSubscription @Inject()(@Named("commandDispatcher") commandDispatcher: ActorRef
+                                              , @Named("imagesRepo") imagesRepo: ActorRef
+                                              , system: ActorSystem)
                                              (implicit ec: ExecutionContext) {
 
   import PhotoConversation._
 
   commandDispatcher ! Subscription(command, SubscrConversation
-    , Some(_ => system.actorOf(props(jobCreation.imagesJobRef))))
+    , Some(_ => system.actorOf(props(imagesRepo))))
 
 }

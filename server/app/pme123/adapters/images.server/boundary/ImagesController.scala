@@ -5,7 +5,7 @@ import javax.inject._
 import controllers.AssetsFinder
 import play.api.Configuration
 import play.api.mvc._
-import pme123.adapters.server.boundary.{AdaptersController, JobCockpitController}
+import pme123.adapters.server.boundary.AdaptersController
 import pme123.adapters.shared.{CUSTOM_PAGE, JOB_PROCESS, JOB_RESULTS}
 
 import scala.concurrent.ExecutionContext
@@ -15,7 +15,6 @@ import scala.concurrent.ExecutionContext
   */
 @Singleton
 class ImagesController @Inject()(template: views.html.index
-                                 , jobController: JobCockpitController
                                  , assetsFinder: AssetsFinder
                                  , cc: ControllerComponents
                                  , val config: Configuration)

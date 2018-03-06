@@ -10,6 +10,8 @@ class Module extends AbstractModule with AkkaGuiceSupport {
 
   override def configure(): Unit = {
 
+    bindActor[ImagesRepo]("imagesRepo")
+
     bind(classOf[JobCreation])
       .to(classOf[ImagesJobCreation])
       .asEagerSingleton()

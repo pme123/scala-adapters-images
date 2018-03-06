@@ -16,15 +16,15 @@ import scala.concurrent.ExecutionContext
 class ImagesJobCreation @Inject()(imagesJob: ImagesProcess
                                   , @Named("actorSchedulers") val actorSchedulers: ActorRef
                                   , system: ActorSystem
-                              )(implicit val mat: Materializer
-                                , val ec: ExecutionContext)
+                                 )(implicit val mat: Materializer
+                                   , val ec: ExecutionContext)
   extends JobCreation {
 
   lazy val imagesJobRef: ActorRef = system.actorOf(JobActor.props(jobConfigs(imagesJobIdent), imagesJob))
 
   def createJobActor(jobConfig: JobConfig): ActorRef = jobConfig.jobIdent match {
     case "imagesJob" => imagesJobRef
-     case other => throw ServiceException(s"There is no Job for $other")
+    case other => throw ServiceException(s"There is no Job for $other")
   }
 }
 
