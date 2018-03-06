@@ -15,6 +15,6 @@ object ImageData {
   implicit val jsonFormat: OFormat[ImageData] = derived.oformat[ImageData]()
 }
 
-case class EmojiData(emojiStr: String, user: String) extends ImageData
+case class EmojiData(emojiStr: String, user: String = "BOT") extends ImageData
 
-case class PhotoData(imgUrl: String, user: String) extends ImageData
+case class PhotoData(imgUrl: String, user: String = "BOT") extends ImageData
