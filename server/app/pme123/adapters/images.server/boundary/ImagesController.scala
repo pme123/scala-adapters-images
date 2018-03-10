@@ -5,8 +5,9 @@ import javax.inject._
 import controllers.AssetsFinder
 import play.api.Configuration
 import play.api.mvc._
-import pme123.adapters.server.boundary.AdaptersController
-import pme123.adapters.shared.{CUSTOM_PAGE, JOB_PROCESS, JOB_RESULTS}
+import pme123.adapters.server.boundary.{AdaptersController, JobCockpitController}
+import pme123.adapters.server.entity.ProjectConfig
+import pme123.adapters.shared.JOB_PROCESS
 
 import scala.concurrent.ExecutionContext
 /**
@@ -14,7 +15,7 @@ import scala.concurrent.ExecutionContext
   * Original see here: https://github.com/playframework/play-scala-websocket-images
   */
 @Singleton
-class ImagesController @Inject()(template: views.html.index
+class ImagesController @Inject()(jobController: JobCockpitController
                                  , assetsFinder: AssetsFinder
                                  , cc: ControllerComponents
                                  , val config: Configuration)
@@ -22,30 +23,19 @@ class ImagesController @Inject()(template: views.html.index
   extends AbstractController(cc)
     with AdaptersController {
 
-  val websocketPath = s"/${shared.imagesJobIdent}"
-
   def index: Action[AnyContent] = jobProcess
 
-  def jobProcess: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    // uses the AssetsFinder API
-    Ok(template(context, JOB_PROCESS
-      , websocketPath
-      , assetsFinder))
-  }
+  def jobProcess: Action[AnyContent] =
+    {
+      val pr= ProjectConfig(context, JOB_PROCESS, s"/jobIdent")
+      jobController.jobProcess(shared.imagesJobIdent)
+    }
 
-  def jobResults: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    // uses the AssetsFinder API
-    Ok(template(context, JOB_RESULTS
-      , websocketPath
-      , assetsFinder))
-  }
+  def jobResults: Action[AnyContent] =
+    jobController.jobResults(shared.imagesJobIdent)
 
-  def images: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    // uses the AssetsFinder API
-    Ok(template(context, CUSTOM_PAGE
-      , websocketPath
-      , assetsFinder))
-  }
+  def images: Action[AnyContent] =
+    jobController.customPage(shared.imagesJobIdent)
 
 }
 

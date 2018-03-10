@@ -23,7 +23,7 @@ object Settings {
 
   lazy val scalaTestV = "3.0.4"
   lazy val playTelegramV = "0.1.0"
-  lazy val adaptersV = "0.4.7"
+  lazy val adaptersV = "0.5.0"
 
   lazy val buildVersion: String = sys.env.getOrElse("BUILD_VERSION", default = projectV)
   lazy val buildNumber: String = sys.env.getOrElse("BUILD_NUMBER", default = s"${(System.currentTimeMillis / 1000).asInstanceOf[Int]}")
