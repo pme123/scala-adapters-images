@@ -3,6 +3,7 @@ import play.api.libs.concurrent.AkkaGuiceSupport
 import pme.bot.boundary.BotRunner
 import pme.bot.control.CommandDispatcher
 import pme123.adapters.images.server.control._
+import pme123.adapters.server.boundary.{AccessControl, NoAccessControl}
 import pme123.adapters.server.control.JobCreation
 import slogging.{LoggerConfig, SLF4JLoggerFactory}
 
@@ -15,6 +16,9 @@ class Module extends AbstractModule with AkkaGuiceSupport {
     bind(classOf[JobCreation])
       .to(classOf[ImagesJobCreation])
       .asEagerSingleton()
+
+    bind(classOf[AccessControl])
+      .to(classOf[NoAccessControl])
 
     // framework
     LoggerConfig.factory = SLF4JLoggerFactory()

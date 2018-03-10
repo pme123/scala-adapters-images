@@ -6,8 +6,6 @@ import controllers.AssetsFinder
 import play.api.Configuration
 import play.api.mvc._
 import pme123.adapters.server.boundary.{AdaptersController, JobCockpitController}
-import pme123.adapters.server.entity.ProjectConfig
-import pme123.adapters.shared.JOB_PROCESS
 
 import scala.concurrent.ExecutionContext
 /**
@@ -26,10 +24,7 @@ class ImagesController @Inject()(jobController: JobCockpitController
   def index: Action[AnyContent] = jobProcess
 
   def jobProcess: Action[AnyContent] =
-    {
-      val pr= ProjectConfig(context, JOB_PROCESS, s"/jobIdent")
       jobController.jobProcess(shared.imagesJobIdent)
-    }
 
   def jobResults: Action[AnyContent] =
     jobController.jobResults(shared.imagesJobIdent)

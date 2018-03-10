@@ -1,8 +1,8 @@
 package pme123.adapters.images.server.control
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
 
-import akka.actor.{Actor, ActorRef, Props}
+import akka.actor.{Actor, ActorRef}
 import akka.stream.Materializer
 import play.api.libs.json.Json
 import pme123.adapters.images.server.control.EmojiConversation.supportedEmojis
@@ -21,6 +21,9 @@ class ImagesRepo @Inject()(implicit val mat: Materializer, val ec: ExecutionCont
 
   private var lastType: ImagesType = PHOTO
 
+  val maxEmojis = 300
+  val maxPhotos = 50
+
   private var emojiDataList =
     supportedEmojis
       .map(s => EmojiData(s))
@@ -37,15 +40,29 @@ class ImagesRepo @Inject()(implicit val mat: Materializer, val ec: ExecutionCont
   def receive: PartialFunction[Any, Unit] = {
     case InitRepo(jobActor) => optJobActor = Some(jobActor)
     case SwitchPage => switchPage()
-    case data: EmojiData => emojiDataList = emojiDataList :+ data
-      if (lastType == EMOJI)
-        optJobActor.foreach(_ ! GenericResult(Json.toJson(data)))
+    case data: EmojiData =>
+      addEmoji(data)
 
-    case data: PhotoData => photoDataList = photoDataList :+ data
-      if (lastType == PHOTO)
-        optJobActor.foreach(_ ! GenericResult(Json.toJson(data)))
+    case data: PhotoData =>
+      addPhoto(data)
 
     case other => warn(s"unexpected message: $other")
+  }
+
+  private def addPhoto(data: PhotoData) {
+    photoDataList = photoDataList :+ data
+    if (photoDataList.lengthCompare(maxPhotos) > 0)
+      photoDataList = photoDataList.drop(1)
+    if (lastType == PHOTO)
+      optJobActor.foreach(_ ! GenericResult(Json.toJson(data)))
+  }
+
+  private def addEmoji(data: EmojiData) {
+    emojiDataList = emojiDataList :+ data
+    if (emojiDataList.lengthCompare(maxEmojis) > 0)
+      emojiDataList = emojiDataList.drop(1)
+    if (lastType == EMOJI)
+      optJobActor.foreach(_ ! GenericResult(Json.toJson(data)))
   }
 
   private def switchPage() {
