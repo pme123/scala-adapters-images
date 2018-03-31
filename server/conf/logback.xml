@@ -54,6 +54,7 @@
     <logger name="play" level="INFO" />
     <logger name="akka" level="INFO" />
     <logger name="pme123" level="INFO" />
+    <logger name="pme" level="INFO" />
     <!-- additivity=false ensures access log data only goes to the access log -->
     <logger name="access-filter" level="INFO" additivity="false">
         <appender-ref ref="ACCESS_FILE" />
