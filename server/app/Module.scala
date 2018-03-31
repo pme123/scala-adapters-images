@@ -29,6 +29,7 @@ class Module extends AbstractModule with AkkaGuiceSupport {
     bind(classOf[BotRunner]).asEagerSingleton()
 
     // your Services:
+    bind(classOf[EmojiConversationSubscription]).asEagerSingleton()
     bind(classOf[PhotoConversationSubscription]).asEagerSingleton()
 
   }
