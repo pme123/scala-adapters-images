@@ -19,14 +19,21 @@ The following image shows you, how to add your Mood with Telegram:
 ## Creating a Bot-Conversation
 We will implement a simple conversation, that uses [play-akka-telegrambot4s](https://github.com/pme123/play-akka-telegrambot4s).
 
-This will only focus on the  implementation of the Bot-Conversation. Everything else will be already in place.
+This will only focus on the  implementation of the Bot-Conversation (). Everything else will be already in place.
 
 1. Clone this repo:
    
    `git clone https://github.com/pme123/scala-adapters-images.git`
 2. Checkout the starting branch:
 
-   `checkout `
+   `git checkout create-emoji-conversation`
+   
+3. Verify project:
+
+   `sbt run -Dpme.bot.token=YOUR_TOKEN`
+   
+   and open: `http://localhost:9000/images` (it should show emojis or photos **after a minute**)
+   
 ## Heroku
  - Go to this directory.
  - Create a Heroku Project: `heroku create`
