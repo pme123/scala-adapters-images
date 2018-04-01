@@ -14,7 +14,7 @@ The idea is that this could show on a Company monitor:
 * The mood of the employees.
 
 The following image shows you, how to add your Mood with Telegram:
-![image](https://user-images.githubusercontent.com/3437927/38164619-91f8ff72-3507-11e8-862c-a5a612d03234.png)
+![images_emojis](https://user-images.githubusercontent.com/3437927/38172224-76c6b3ba-35a8-11e8-8054-a9587398b18a.gif)
 
 ## Creating a Bot-Conversation
 Second part of the Bot-workshop - see here to start: [scala-telegrambot4s](https://github.com/pme123/scala-telegrambot4s)
